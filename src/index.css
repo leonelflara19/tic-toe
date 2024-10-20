@@ -129,3 +129,68 @@ body {
   cursor: pointer;
   font-size: 48px;
 }
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #fff; 
+  color: #000; 
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.answers {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+}
+
+.answers button {
+  margin: 5px 0;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff; 
+  color: #000; 
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.answers button:hover {
+  background-color: #f4f6f7;
+}
+
+button {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: #000; 
+}
+
+.category-button {
+  color: black; /* Cambia el color de la fuente a negro */
+  background-color: transparent; /* Puedes ajustar el fondo según prefieras */
+  border: none; /* Sin bordes si así lo deseas */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+}
+
+.category-button:hover {
+  opacity: 0.8; /* Un efecto visual al pasar el mouse */
+}

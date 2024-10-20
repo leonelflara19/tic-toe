@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './App.css';
+import './index.css'
 import { Squared } from './components/Squared';
 import { QuestionModal } from './components/QuestionModal';
 import confetti from 'canvas-confetti';
@@ -74,7 +75,6 @@ function App() {
   };
 
   const handleIncorrectAnswer = () => {
-    // Cambia el turno si la respuesta es incorrecta
     const newTurn = turn === TURN.X ? TURN.O : TURN.X;
     setTurn(newTurn);
   };
@@ -112,7 +112,7 @@ function App() {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onCorrectAnswer={handleCorrectAnswer}
-          onIncorrectAnswer={handleIncorrectAnswer} // Pasamos la función para respuesta incorrecta
+          onIncorrectAnswer={handleIncorrectAnswer} 
         />
       </main>
     </>
