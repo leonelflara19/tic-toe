@@ -114,9 +114,9 @@ function App() {
       <main className="board">
         <h1>Tic Tac Toe</h1>
         <button onClick={resetGame}>Resetear Juego</button>
-        <button className="toggle" onClick={toggleDarkMode}>
+        {/* <button className="toggle" onClick={toggleDarkMode}>
           {isDarkMode ? 'Modo Claro' : 'Modo Oscuro'}
-        </button>
+        </button> */}
         <section className="game">
           {board.map((_, index) => (
             <Squared key={index} index={index} updatedBoard={() => handleSquareClick(index)}>
