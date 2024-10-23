@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import './App.css';
-import './index.css'
 import { Squared } from './components/Squared';
 import { QuestionModal } from './components/QuestionModal';
 import confetti from 'canvas-confetti';
@@ -27,6 +26,7 @@ function App() {
   const [winner, setWinner] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pendingMove, setPendingMove] = useState(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const checkWinner = (boardToCheck) => {
     for (let combo of WINNER_COMBINATIONS) {
@@ -68,10 +68,36 @@ function App() {
     const newWinner = checkWinner(newBoard);
     if (newWinner) {
       setWinner(newWinner);
-      confetti();
+      triggerConfetti();
     } else if (checkEndGame(newBoard)) {
       setWinner(false);
     }
+  };
+
+  const triggerConfetti = () => {
+    const end = Date.now() + (3 * 1000); // Confeti por 3 segundos
+    const colors = ['#bb0000', '#ffffff']; // Colores personalizados
+
+    (function frame() {
+      confetti({
+        particleCount: 2,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        colors: colors
+      });
+      confetti({
+        particleCount: 2,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        colors: colors
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    }());
   };
 
   const handleIncorrectAnswer = () => {
@@ -79,11 +105,18 @@ function App() {
     setTurn(newTurn);
   };
 
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
   return (
-    <>
+    <div className={`app ${isDarkMode ? 'dark' : 'light'}`}>
       <main className="board">
-        <h1>Tic tac toe</h1>
+        <h1>Tic Tac Toe</h1>
         <button onClick={resetGame}>Resetear Juego</button>
+        <button className="toggle" onClick={toggleDarkMode}>
+          {isDarkMode ? 'Modo Claro' : 'Modo Oscuro'}
+        </button>
         <section className="game">
           {board.map((_, index) => (
             <Squared key={index} index={index} updatedBoard={() => handleSquareClick(index)}>
@@ -93,8 +126,8 @@ function App() {
         </section>
 
         <section className="turn">
-          <Squared isSelected={turn === TURN.X}>{TURN.X}</Squared>
-          <Squared isSelected={turn === TURN.O}>{TURN.O}</Squared>
+          <Squared isSelected={turn === TURN.X} color="blue">{TURN.X}</Squared>
+          <Squared isSelected={turn === TURN.O} color="red">{TURN.O}</Squared>
         </section>
 
         {winner !== null && (
@@ -112,10 +145,10 @@ function App() {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onCorrectAnswer={handleCorrectAnswer}
-          onIncorrectAnswer={handleIncorrectAnswer} 
+          onIncorrectAnswer={handleIncorrectAnswer}
         />
       </main>
-    </>
+    </div>
   );
 }
 
