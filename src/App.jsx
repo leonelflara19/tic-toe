@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import { Squared } from './components/Squared';
 import { QuestionModal } from './components/QuestionModal';
@@ -10,31 +10,48 @@ const TURN = {
 };
 
 const WINNER_COMBINATIONS = [
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8],
-  [0, 4, 8],
-  [2, 4, 6],
-  [0, 3, 6],
-  [1, 4, 7],
-  [2, 5, 8],
+  // Filas
+  [0, 1, 2, 3],
+  [4, 5, 6, 7],
+  [8, 9, 10, 11],
+  [12, 13, 14, 15],
+  // Columnas
+  [0, 4, 8, 12],
+  [1, 5, 9, 13],
+  [2, 6, 10, 14],
+  [3, 7, 11, 15],
+  // Diagonales
+  [0, 5, 10, 15],
+  [3, 6, 9, 12],
 ];
 
 function App() {
-  const [board, setBoard] = useState(Array(9).fill(null));
+  const [board, setBoard] = useState(Array(16).fill(null));
   const [turn, setTurn] = useState(TURN.X);
   const [winner, setWinner] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pendingMove, setPendingMove] = useState(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  // Effecto para aplicar la clase de dark mode al body
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark');
+      document.body.classList.remove('light');
+    } else {
+      document.body.classList.add('light');
+      document.body.classList.remove('dark');
+    }
+  }, [isDarkMode]);
+
   const checkWinner = (boardToCheck) => {
     for (let combo of WINNER_COMBINATIONS) {
-      const [a, b, c] = combo;
+      const [a, b, c, d] = combo;
       if (
         boardToCheck[a] &&
         boardToCheck[a] === boardToCheck[b] &&
-        boardToCheck[a] === boardToCheck[c]
+        boardToCheck[a] === boardToCheck[c] &&
+        boardToCheck[a] === boardToCheck[d]
       ) {
         return boardToCheck[a];
       }
@@ -43,9 +60,10 @@ function App() {
   };
 
   const resetGame = () => {
-    setBoard(Array(9).fill(null));
+    setBoard(Array(16).fill(null));
     setTurn(TURN.X);
     setWinner(null);
+    window.location.reload();
   };
 
   const checkEndGame = (newBoard) => {
@@ -84,20 +102,20 @@ function App() {
         angle: 60,
         spread: 55,
         origin: { x: 0 },
-        colors: colors
+        colors: colors,
       });
       confetti({
         particleCount: 2,
         angle: 120,
         spread: 55,
         origin: { x: 1 },
-        colors: colors
+        colors: colors,
       });
 
       if (Date.now() < end) {
         requestAnimationFrame(frame);
       }
-    }());
+    })();
   };
 
   const handleIncorrectAnswer = () => {
@@ -110,13 +128,13 @@ function App() {
   };
 
   return (
-    <div className={`app ${isDarkMode ? 'dark' : 'light'}`}>
+    <div className="app">
       <main className="board">
         <h1>Tic Tac Toe</h1>
-        <button onClick={resetGame}>Resetear Juego</button>
-        {/* <button className="toggle" onClick={toggleDarkMode}>
+        <button className="reset-button" onClick={resetGame}>Resetear Juego</button>
+        <button className="toggle" onClick={toggleDarkMode}>
           {isDarkMode ? 'Modo Claro' : 'Modo Oscuro'}
-        </button> */}
+        </button>
         <section className="game">
           {board.map((_, index) => (
             <Squared key={index} index={index} updatedBoard={() => handleSquareClick(index)}>
@@ -125,7 +143,7 @@ function App() {
           ))}
         </section>
 
-        <section className="turn">
+        <section className="turn" style={{display:"flex", gap:"10px"}}>
           <Squared isSelected={turn === TURN.X} color="blue">{TURN.X}</Squared>
           <Squared isSelected={turn === TURN.O} color="red">{TURN.O}</Squared>
         </section>
